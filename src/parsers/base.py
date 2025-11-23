@@ -3,7 +3,7 @@
 
 from abc import ABC, abstractmethod
 from bs4 import BeautifulSoup
-from src.config import Config
+from src.config.config import Config
 
 class BaseParser(ABC):
     def __init__(self, config: Config):
