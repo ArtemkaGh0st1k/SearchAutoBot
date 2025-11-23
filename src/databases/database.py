@@ -2,7 +2,7 @@
 # Класс для управления БД (расширяемо: добавь миграции, asyncpg для Postgres)
 
 import aiosqlite
-from src.config import Config
+from src.config.config import Config
 
 class DatabaseManager:
     def __init__(self, config: Config):

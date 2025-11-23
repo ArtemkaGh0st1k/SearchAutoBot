@@ -6,7 +6,7 @@ import aiohttp
 import hashlib
 from bs4 import BeautifulSoup
 from telegram.ext import Application
-from src.config import Config
+from src.config.config import Config
 from src.databases.database import DatabaseManager
 from src.parsers.base import BaseParser
 

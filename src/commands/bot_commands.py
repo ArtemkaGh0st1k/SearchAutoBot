@@ -4,7 +4,7 @@
 from telegram import Update
 from telegram.ext import ContextTypes
 from src.databases.database import DatabaseManager
-from src.config import Config
+from src.config.config import Config
 
 class BotCommands:
     def __init__(self, config: Config, db_manager: DatabaseManager):
