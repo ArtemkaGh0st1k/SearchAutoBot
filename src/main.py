@@ -8,8 +8,6 @@ from src.commands.bot_commands import BotCommands
 from src.services.monitoring import MonitoringService
 from src.config.config import Config
 
-TOKEN = "7757377456:AAHB-cw-R4N1UIxYEeKFhSm9tipiPs-4Dr4"
-
 async def main():
     config = Config()
     db_manager = DatabaseManager(config)
