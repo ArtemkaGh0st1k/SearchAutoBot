@@ -17,13 +17,9 @@ class DatabaseManager:
                     user_id INTEGER,
                     chat_id INTEGER,
                     query TEXT NOT NULL,
+                    is_active INTEGER DEFAULT 1,
                     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     UNIQUE(user_id, chat_id, query)
-                )
-            ''')
-            await db.execute('''
-                CREATE TABLE IF NOT EXISTS seen_ads (
-                    hash TEXT PRIMARY KEY
                 )
             ''')
             await db.commit()
@@ -49,22 +45,22 @@ class DatabaseManager:
     async def get_chat_subscriptions(self, user_id: int, chat_id: int) -> list:
         async with aiosqlite.connect(self.db_file) as db:
             async with db.execute(
-                "SELECT query FROM subscriptions WHERE user_id = ? AND chat_id = ? ORDER BY query",
+                "SELECT query, is_active FROM subscriptions WHERE user_id = ? AND chat_id = ? ORDER BY query",
                 (user_id, chat_id)
             ) as cursor:
-                return [row[0] for row in await cursor.fetchall()]
+                return await cursor.fetchall()  # Теперь возвращает [(query, is_active), ...]
 
-    async def get_all_user_subscriptions(self, user_id: int) -> list:
-        async with aiosqlite.connect(self.db_file) as db:
-            async with db.execute(
-                "SELECT chat_id, query FROM subscriptions WHERE user_id = ? ORDER BY chat_id, query",
-                (user_id,)
-            ) as cursor:
-                return await cursor.fetchall()
+async def get_all_user_subscriptions(self, user_id: int) -> list:
+    async with aiosqlite.connect(self.db_file) as db:
+        async with db.execute(
+            "SELECT chat_id, query, is_active FROM subscriptions WHERE user_id = ? ORDER BY chat_id, query",
+            (user_id,)
+        ) as cursor:
+            return await cursor.fetchall()  # [(chat_id, query, is_active), ...]
 
     async def get_all_subscriptions(self) -> list:
         async with aiosqlite.connect(self.db_file) as db:
-            async with db.execute("SELECT chat_id, query FROM subscriptions") as cursor:
+            async with db.execute("SELECT chat_id, query FROM subscriptions WHERE is_active = 1") as cursor:
                 return await cursor.fetchall()
 
     async def load_seen_ads(self) -> set:

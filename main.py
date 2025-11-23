@@ -23,7 +23,12 @@ async def main():
     app.add_handler(CommandHandler("remove", bot_commands.remove))
     app.add_handler(CommandHandler("mylist", bot_commands.mylist))
     app.add_handler(CommandHandler("mychats", bot_commands.mychats))
+    app.add_handler(CommandHandler("clear_chat", bot_commands.clear_chat))
+    app.add_handler(CommandHandler("pause", bot_commands.pause))
+    app.add_handler(CommandHandler("resume", bot_commands.resume))
     app.add_handler(CommandHandler("help", bot_commands.help))
+
+    await bot_commands.set_bot_commands(app.bot)
 
     # Мониторинг как сервис
     monitoring_service = MonitoringService(config, db_manager, app)
